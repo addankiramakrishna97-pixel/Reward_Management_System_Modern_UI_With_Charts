@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+.hr-header {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.logout-btn {
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+}
+
+.hr-container {
+    padding: 30px 20px;
+    flex: 1;
+    display: flex;
+    gap: 30px;
+}
+
+
+.profile-header {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    padding: 20px;
+    text-align: center;
+    position: sticky;
+    top: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Glass Effect */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: 0.4s ease;
+}
+
+.profile-header::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+    z-index: -1;
+    animation: rotateBorder 6s linear infinite;
+}
+
+@keyframes rotateBorder {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.profile-header:hover {
+    transform: scale(1.05);
+}
+
+.profile-avatar {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: 0.3s ease;
+}
+
+.profile-avatar.active {
+    transform: scale(1.4);
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+}
+
+.stat-card h3 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.stat-card .value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #667eea;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* CHART */
+.chart-container {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.chart-container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* BUTTON */
+.bottom-allocate {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+    padding: 20px;
+}
+
+.allocate-btn {
+    padding: 15px 35px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    color: white;
+    transition: 0.3s;
+}
+
+.allocate-btn:hover {
+    transform: translateY(-3px);
+}
+</style>
+</head>
+
+<body>
+
+<div class="hr-header">
+    <div class="header-title">HR Dashboard</div>
+    <a href="/"><button class="logout-btn">🚪 Logout</button></a>
+</div>
+
+<div class="hr-container">
+
+    
+    <div class="profile-header">
+        <div class="profile-avatar" onclick="openProfileImage()">👩‍💼</div>
+        <h3>Sandhya</h3>
+        <p>Human Resources Manager</p>
+    </div>
+
+    
+    <div class="main-content">
+
+        
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <h3>Total Reward Amount</h3>
+                <div class="value">₹2,50,000</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Employees Benefited</h3>
+                <div class="value">48</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Employees</h3>
+                <div class="value">120</div>
+            </div>
+        </div>
+
+        
+        <div class="dashboard-grid">
+            <a href="/add-employee">
+                <div class="stat-card">
+                    <h3>➕ Add Employee</h3>
+                </div>
+            </a>
+
+            <a href="/allocate">
+                <div class="stat-card">
+                    <h3>🎁 Allocate Bonus</h3>
+                </div>
+            </a>
+
+            <a href="/reports">
+                <div class="stat-card">
+                    <h3>📊 View Reports</h3>
+                </div>
+            </a>
+
+            <a href="/attendance">
+                <div class="stat-card">
+                    <h3>📅 Attendance Summary</h3>
+                </div>
+            </a>
+        </div>
+
+        
+        <div class="chart-container">
+            <h3>Reward Categories Overview</h3>
+            <canvas id="rewardChart"></canvas>
+        </div>
+
+        
+        <div class="chart-container">
+            <h3>📈 Monthly Reward Growth (Last 6 Months)</h3>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+
+        <div class="bottom-allocate">
+            <a href="/allocate">
+                <button class="allocate-btn">✨ Allocate New Reward</button>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function openProfileImage() {
+    document.querySelector('.profile-avatar').classList.toggle('active');
+}
+
+
+new Chart(document.getElementById('rewardChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Performance','Festival','Referral','Bonus'],
+        datasets: [{
+            data: [50000,40000,30000,60000],
+            backgroundColor: ['#667eea','#764ba2','#f093fb','#f5576c']
+        }]
+    },
+    options: { responsive: true }
+});
+
+
+new Chart(document.getElementById('monthlyChart'), {
+    type: 'line',
+    data: {
+        labels: ['Sep','Oct','Nov','Dec','Jan','Feb'],
+        datasets: [{
+            data: [12000,19000,15000,22000,18000,25000],
+            borderColor:'#f5576c',
+            backgroundColor:'rgba(245,87,108,0.2)',
+            fill:true,
+            tension:0.4
+        }]
+    },
+    options: { responsive: true }
+});
+</script>
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    var socket = io();
+
+    socket.on("reward_added", function(data) {
+        alert("New Reward Allocated to Employee ID: " + data.employee_id);
+        location.reload(); // auto refresh dashboard
+    });
+</script>
+
+
+</body>
+</html>

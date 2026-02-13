@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allocate Reward - Reward Management System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="card">
+<h2>Allocate Reward</h2>
+<form method="post">
+<label for="employee_id" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Select Employee:</label>
+<select name="employee_id" id="employee_id" required>
+<option value="" disabled selected>Choose an employee...</option>
+{% for emp_id, username in employees %}
+<option value="{{ emp_id }}">{{ emp_id }} - {{ username }}</option>
+{% endfor %}
+</select>
+
+<label for="reward" style="display: block; margin-top: 15px; margin-bottom: 8px; font-weight: 600; color: #333;">Reward Type:</label>
+<select name="reward" id="reward" required>
+<option value="" disabled selected>Choose a reward...</option>
+<option>Bonus</option>
+<option>Incentive</option>
+<option>Recognition</option>
+</select>
+
+<label for="amount" style="display: block; margin-top: 15px; margin-bottom: 8px; font-weight: 600; color: #333;">Amount (in Rupees ₹):</label>
+<input type="number" name="amount" id="amount" placeholder="Enter amount in rupees" min="0" step="100" required>
+
+<button type="submit">Allocate Reward</button>
+</form>
+<a href="/hr" style="display: block; margin-top: 10px;"><button style="background: #6c757d;">Back to Dashboard</button></a>
+</div>
+</body>
+</html>

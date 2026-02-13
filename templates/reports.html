@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Reports - HR Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .content h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-container h3 {
+            text-align: center;
+            color: #333;
+            margin: 0 0 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #555;
+        }
+
+        tbody tr:hover {
+            background: #f5f5f5;
+            transition: 0.2s;
+        }
+
+        .amount {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .rank {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 35px;
+        }
+
+        .rank.top {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .stat-box .value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Reward Reports</h1>
+            <a href="/hr" class="back-btn">← Back to Dashboard</a>
+        </div>
+
+        <div class="content">
+            <h2>Reward Summary Dashboard</h2>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <h3>Total Rewards Given</h3>
+                    <div class="value">{{ reward_summary|length }}</div>
+                </div>
+                <div class="stat-box">
+                    <h3>Total Amount Awarded</h3>
+                    <div class="value">₹{{ "{:,}".format(reward_summary|sum(attribute=2)|int) }}</div>
+                </div>
+                <div class="stat-box">
+                    <h3>Avg. Reward/Type</h3>
+                    <div class="value">{{ (reward_summary|sum(attribute=1)|int / reward_summary|length)|int if reward_summary else 0 }}</div>
+                </div>
+                <div class="stat-box">
+                    <h3>Employees Rewarded</h3>
+                    <div class="value">{{ employee_rewards|length }}</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Reward Distribution by Type</h3>
+                    <canvas id="rewardTypeChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Top Reward Categories</h3>
+                    <canvas id="rewardCategoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <h2>Employee-wise Reward Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Employee Name</th>
+                        <th>Number of Rewards</th>
+                        <th>Total Amount (₹)</th>
+                        <th>Avg. Reward Value (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp in employee_rewards %}
+                    <tr>
+                        <td>
+                            <span class="rank {% if loop.index0 < 3 %}top{% endif %}">
+                                #{{ loop.index }}
+                            </span>
+                        </td>
+                        <td>{{ emp[0] }}</td>
+                        <td>{{ emp[1] if emp[1] else 0 }}</td>
+                        <td><span class="amount">₹{{ "{:,}".format(emp[2]|int) if emp[2] else 0 }}</span></td>
+                        <td>₹{{ "{:,}".format((emp[2] / emp[1])|int) if emp[1] and emp[2] else 0 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content">
+            <h2>Reward Type Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Reward Type</th>
+                        <th>Count</th>
+                        <th>Total Amount (₹)</th>
+                        <th>Avg. Amount (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reward in reward_summary %}
+                    <tr>
+                        <td><strong>{{ reward[0] }}</strong></td>
+                        <td>{{ reward[1] }}</td>
+                        <td><span class="amount">₹{{ "{:,}".format(reward[2]|int) if reward[2] else 0 }}</span></td>
+                        <td>₹{{ "{:,}".format((reward[2] / reward[1])|int) if reward[2] else 0 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        
+        const rewardTypes = {{ reward_summary|map(attribute=0)|list|tojson }};
+        const rewardCounts = {{ reward_summary|map(attribute=1)|list|tojson }};
+        const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#fa6a7d', '#ff6b9d'];
+
+        new Chart(document.getElementById('rewardTypeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: rewardTypes,
+                datasets: [{
+                    data: rewardCounts,
+                    backgroundColor: colors.slice(0, rewardTypes.length)
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        
+        const rewardAmounts = {{ reward_summary|map(attribute=2)|list|tojson }};
+
+        new Chart(document.getElementById('rewardCategoryChart'), {
+            type: 'bar',
+            data: {
+                labels: rewardTypes,
+                datasets: [{
+                    label: 'Total Amount (₹)',
+                    data: rewardAmounts,
+                    backgroundColor: '#667eea',
+                    borderColor: '#667eea',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

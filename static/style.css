@@ -1,0 +1,170 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card {
+    background: #ffffff;
+    padding: 40px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+h2 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 12px 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.2);
+    background-color: #f8f9ff;
+}
+
+
+button {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 12px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+p {
+    color: #666666;
+    font-size: 15px;
+    line-height: 1.8;
+    margin: 15px 0;
+}
+
+
+canvas {
+    margin: 30px 0;
+    display: block;
+    max-width: 100%;
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+option {
+    padding: 10px;
+    background: #ffffff;
+    color: #333333;
+}
+
+
+@media (max-width: 768px) {
+    .card {
+        padding: 30px 20px;
+        margin: 20px 0;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+
+    input, select, button {
+        padding: 11px 12px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    input, select, button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
